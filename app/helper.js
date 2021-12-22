@@ -7,10 +7,6 @@ const fs = require('fs');
 const shell = require("shelljs");
 const colors = require("colors");
 
-const util = require('util');
-const { resolve } = require('path');
-const { rejects } = require('assert');
-
 const bashFilesDir = path.join(__dirname, '../bash-files');
 
 
@@ -21,12 +17,6 @@ const getCCP = async (org) => {
 
     } else if (org == "Org2") {
         ccpPath = path.resolve(__dirname, '..', 'config', 'connection-org2.json');
-    } 
-    
-    // #changed
-    else if (org == "Org1-fabcar") {
-        ccpPath = path.resolve(__dirname, '..', '..', 'organizations', 'peerOrganizations', 
-        'org1.example.com', 'connection-org1.json');
     } 
     
     else return null
@@ -51,11 +41,6 @@ const getCaUrl = async (org, ccp) => {
     } else if (org == "Org2") {
         caURL = ccp.certificateAuthorities['ca.org2.example.com'].url;
     } 
-
-    // #changed
-    else if (org == "Org1-fabcar") {
-        caURL = ccp.certificateAuthorities['ca.org1.example.com'].url;
-    } 
     
     else
         return null
@@ -71,12 +56,7 @@ const getWalletPath = async (org) => {
     } else if (org == "Org2") {
         walletPath = path.join(process.cwd(), 'org2-wallet');
     } 
-    
-    // #changed
-    else if (org == "Org1-fabcar") {
-        walletPath = path.resolve(process.cwd(), 'org1-fabcar-wallet"');
-    } 
-    
+
     else
         return null
 
@@ -121,33 +101,6 @@ const getRegisteredUser = async (username, userOrg, isJson) => {
 
         console.log("Admin Enrolled Successfully")
     }
-
-    // // build a user object for authenticating with the CA
-    // const provider = wallet.getProviderRegistry().getProvider(adminIdentity.type);
-    // const adminUser = await provider.getUserContext(adminIdentity, 'admin');
-    // let secret;
-    // try {
-    //     if (username == "superuser") {
-    //         // Register the user, enroll the user, and import the new identity into the wallet.
-    //         secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: username, role: 'client', attrs: [{ name: 'role', value: 'admin', ecert: true }] }, adminUser);
-
-    //     } else {
-    //         secret = await ca.register({ affiliation: await getAffiliation(userOrg), enrollmentID: username, role: 'client' }, adminUser);
-
-    //     }
-
-    // } catch (error) {
-    //     return error.message
-    // }
-
-    // let enrollment;
-    // if (username == "superuser") {
-    //     enrollment = await ca.enroll({ enrollmentID: username, enrollmentSecret: secret, attr_reqs: [{ name: 'role', optional: false }] });
-
-    // } else {
-    //     enrollment = await ca.enroll({ enrollmentID: username, enrollmentSecret: secret });
-
-    // }
 
 
     // *****************************************************
@@ -217,11 +170,6 @@ const getCaInfo = async (org, ccp) => {
 
     } else if (org == "Org2") {
         caInfo = ccp.certificateAuthorities['ca.org2.example.com'];
-    } 
-
-    // #changed
-    else if (org == "Org1-fabcar") {
-        caInfo = ccp.certificateAuthorities['ca.org1.example.com'];
     } 
     
     else
@@ -411,6 +359,7 @@ async function getListOfFilesAndDirs(path)
 }
 
 
+// get the last created privateKey file
 async function getOldestFilebyDate(path, files)
 {
     let oldestFileInfo = {date: 0, name: ""};

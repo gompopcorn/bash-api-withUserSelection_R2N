@@ -139,7 +139,10 @@ app.post('/register', async function (req, res) {
     logger.debug('End point : /users');
     logger.debug('User name : ' + username);
     logger.debug('Org name  : ' + orgName);
-    if (!username) {
+    if (!username) {(userOrg)
+
+        const caURL = await getCaUrl(userOrg, ccp)
+        const ca = new FabricCAServices(caURL);
         res.json(getErrorMessage('\'username\''));
         return;
     }
